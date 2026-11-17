@@ -15,6 +15,8 @@ public class MainVerticle extends VerticleBase {
   @Override
   public Future<?> start() {
     Router router = Router.router(vertx);
+    // KEEP THIS: one log line per request (status + duration) is what the workspace Monitoring tab charts.
+    router.route().handler(new RequestLog());
     router.get("/").handler(ctx -> ctx.json(new JsonObject().put("app", "vertx-template").put("status", "ok")));
     // The fleet's health check (fleet.conf HEALTH_PATH).
     router.get("/health").handler(ctx -> ctx.json(new JsonObject().put("status", "ok")));
